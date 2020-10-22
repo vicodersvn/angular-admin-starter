@@ -1,0 +1,92 @@
+---
+kind: pipeline
+type: docker
+name: default
+globals:
+  - &docker_creds
+    username:
+      from_secret: docker_user
+    password:
+      from_secret: docker_password
+steps:
+  - name: prepare
+    image: busybox
+    commands:
+      - mkdir -p /cache/${DRONE_REPO}/docker
+    volumes:
+      - name: cache
+        path: /cache
+  - name: build
+    image: plugins/docker
+    settings:
+      registry: docker-registry.vicoders.com
+      repo: docker-registry.vicoders.com/pigeon_website
+      tags:
+        - ${DRONE_COMMIT_BRANCH}
+      create_repository: true
+      use_cache: true
+      <<: *docker_creds
+    volumes:
+      - name: docker
+        path: /var/lib/docker
+  - name: deploy_prod
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: SERVER_IP
+      ssh_key:
+        from_secret: SERVER_SSH_KEY
+      port: 1080
+      script_stop: true
+      script:
+        - docker pull docker-registry.vicoders.com/pigeon_website:${DRONE_COMMIT_BRANCH}
+        - docker service update --image docker-registry.vicoders.com/pigeon_website:${DRONE_COMMIT_BRANCH} --force pigeon_website
+        - docker system prune -f
+    when:
+      branch:
+        - production
+  - name: deploy_staging
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: SERVER_IP
+      ssh_key:
+        from_secret: SERVER_SSH_KEY
+      port: 1080
+      script_stop: true
+      script:
+        - docker pull docker-registry.vicoders.com/pigeon_website:${DRONE_COMMIT_BRANCH}
+        - docker service update --image docker-registry.vicoders.com/pigeon_website:${DRONE_COMMIT_BRANCH} --force pigeon_dev_website
+        - docker system prune -f
+    when:
+      branch:
+        - staging
+  - name: deploy_old
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: SERVER_IP
+      ssh_key:
+        from_secret: SERVER_SSH_KEY
+      port: 1080
+      script_stop: true
+      script:
+        - docker pull docker-registry.vicoders.com/pigeon_website:${DRONE_COMMIT_BRANCH}
+        - docker service update --image docker-registry.vicoders.com/pigeon_website:${DRONE_COMMIT_BRANCH} --force old_pigeon_website
+        - docker system prune -f
+    when:
+      branch:
+        - old
+volumes:
+  - name: cache
+    host:
+      path: /var/cache
+  - name: docker
+    host:
+      path: /var/cache/${DRONE_REPO}/docker
+
+trigger:
+  branch:
+    - staging
+    - production
+    - old
