@@ -52,14 +52,7 @@
               "node_modules/echarts/dist/extension/bmap.min.js",
               "node_modules/chart.js/dist/Chart.min.js"
             ],
-            "allowedCommonJsDependencies": [
-              "angular2-chartjs",
-              "echarts",
-              "lodash",
-              "zrender/lib/svg/svg",
-              "zrender/lib/vml/vml",
-              "style-loader!leaflet/dist/leaflet.css"
-            ]
+            "allowedCommonJsDependencies": ["angular2-chartjs", "echarts", "lodash", "zrender/lib/svg/svg", "zrender/lib/vml/vml", "style-loader!leaflet/dist/leaflet.css"]
           },
           "configurations": {
             "production": {
@@ -148,10 +141,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
+            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
             "typeCheck": true,
             "exclude": []
           }
@@ -173,9 +163,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "e2e/tsconfig.e2e.json"
-            ],
+            "tsConfig": ["e2e/tsconfig.e2e.json"],
             "exclude": []
           }
         }
@@ -185,11 +173,7 @@
   "defaultProject": "app",
   "schematics": {
     "@schematics/angular:component": {
-      "prefix": "ngx",
       "style": "scss"
-    },
-    "@schematics/angular:directive": {
-      "prefix": "ngx"
     }
   }
 }

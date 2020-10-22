@@ -7,10 +7,9 @@ import { forkJoin } from 'rxjs';
 @Component({
   selector: 'ngx-temperature',
   styleUrls: ['./temperature.component.scss'],
-  templateUrl: './temperature.component.html',
+  templateUrl: './temperature.component.html'
 })
 export class TemperatureComponent implements OnDestroy {
-
   private alive = true;
 
   temperatureData: Temperature;
@@ -26,25 +25,23 @@ export class TemperatureComponent implements OnDestroy {
   theme: any;
   themeSubscription: any;
 
-  constructor(private themeService: NbThemeService,
-              private temperatureHumidityService: TemperatureHumidityData) {
-    this.themeService.getJsTheme()
+  constructor(private themeService: NbThemeService, private temperatureHumidityService: TemperatureHumidityData) {
+    this.themeService
+      .getJsTheme()
       .pipe(takeWhile(() => this.alive))
-      .subscribe(config => {
-      this.theme = config.variables.temperature;
-    });
+      .subscribe((config) => {
+        this.theme = config.variables.temperature;
+      });
 
-    forkJoin(
-      this.temperatureHumidityService.getTemperatureData(),
-      this.temperatureHumidityService.getHumidityData(),
-    )
-      .subscribe(([temperatureData, humidityData]: [Temperature, Temperature]) => {
+    forkJoin([this.temperatureHumidityService.getTemperatureData(), this.temperatureHumidityService.getHumidityData()]).subscribe(
+      ([temperatureData, humidityData]: [Temperature, Temperature]) => {
         this.temperatureData = temperatureData;
         this.temperature = this.temperatureData.value;
 
         this.humidityData = humidityData;
         this.humidity = this.humidityData.value;
-      });
+      }
+    );
   }
 
   ngOnDestroy() {
