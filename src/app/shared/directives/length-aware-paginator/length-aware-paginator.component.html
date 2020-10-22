@@ -1,0 +1,13 @@
+<div class="pagination-custom" *ngIf="pagination.getTotalPages() > 0">
+  <div class="d-flex align-items-center justify-content-end">
+    <p class="m-0 pr-3">{{ label }}</p>
+    <input type="number" name="page" [(ngModel)]="current_page" (change)="change()" (ngModelChange)="onFieldChange($event)" class="number-pages mr-3" />
+    <p class="m-0 pr-3">{{ ofLabel }} {{ pagination.getTotalPages() }}</p>
+    <a *ngIf="shouldActivePrev()" [routerLink]="getCurrentUrl()" [queryParams]="this.resolveParams(getCurrentPage(), 'prev')" class="pre mr-2">
+      <i class="fa fa-chevron-left" aria-hidden="true"></i
+    ></a>
+    <a *ngIf="shouldActiveNext()" [routerLink]="getCurrentUrl()" [queryParams]="this.resolveParams(getCurrentPage(), 'next')" class="next"
+      ><i class="fa fa-chevron-right" aria-hidden="true"></i
+    ></a>
+  </div>
+</div>

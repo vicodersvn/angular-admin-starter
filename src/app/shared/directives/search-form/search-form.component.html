@@ -1,0 +1,10 @@
+<form class="search-form search-form--inline" (ngSubmit)="onSubmit()">
+  <div class="col d-flex">
+    <div class="form-group w-100 pr-3">
+      <input type="text" placeholder="{{ placeHolder }}" nbInput fullWidth fieldSize="medium" [(ngModel)]="keyword" name="keyword" />
+    </div>
+    <div class="col-auto pr-0">
+      <button nbButton size="medium" outline>{{ btnText }}</button>
+    </div>
+  </div>
+</form>
