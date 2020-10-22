@@ -9,5 +9,9 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false,
+  production: false, // enable production mode
+  enableMockApi: false, // use mock api
+  tokenKey: 'token', // cookie key of authentication token
+  LOCALE_ID: 'vi',
+  apiUrl: 'http://api.server.com'
 };
